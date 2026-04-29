@@ -1,0 +1,109 @@
+{
+  "name": "FlowPilotX - Lead Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "flowpilotx-lead",
+        "responseMode": "onReceived"
+      },
+      "id": "Webhook",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.email}}",
+              "operation": "notEmpty"
+            }
+          ]
+        }
+      },
+      "id": "IFNode",
+      "name": "Validate Input",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "email",
+              "value": "={{$json.email}}"
+            },
+            {
+              "name": "chatId",
+              "value": "={{$json.chatId}}"
+            },
+            {
+              "name": "source",
+              "value": "telegram-bot"
+            },
+            {
+              "name": "status",
+              "value": "new_lead"
+            },
+            {
+              "name": "createdAt",
+              "value": "={{new Date().toISOString()}}"
+            }
+          ]
+        }
+      },
+      "id": "SetNode",
+      "name": "Format Lead Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/store-lead",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\n  \"email\": $json.email,\n  \"chatId\": $json.chatId,\n  \"source\": $json.source,\n  \"status\": $json.status\n}"
+      },
+      "id": "HTTPNode",
+      "name": "Store Lead (Backend API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "bunny08@zohomail.in",
+        "toEmail": "vishal.s@gortnm.in",
+        "subject": "New Lead Captured 🚀",
+        "text": "New lead received:\n\nEmail: {{$json.email}}\nChat ID: {{$json.chatId}}\nSource: {{$json.source}}\nStatus: {{$json.status}}"
+      },
+      "id": "EmailNode",
+      "name": "Notify Admin Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{ "node": "Validate Input", "type": "main", "index": 0 }]]
+    },
+    "Validate Input": {
+      "main": [[{ "node": "Format Lead Data", "type": "main", "index": 0 }]]
+    },
+    "Format Lead Data": {
+      "main": [[{ "node": "Store in MongoDB", "type": "main", "index": 0 }]]
+    },
+    "Store in MongoDB": {
+      "main": [[{ "node": "Notify Admin Email", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {}
+}
