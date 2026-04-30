@@ -1,0 +1,213 @@
+{
+  "name": "FlowPilotX - DM Automation Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "flowpilotx-automation",
+        "responseMode": "onReceived"
+      },
+      "id": "Webhook",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"type\"]}}",
+              "operation": "equal",
+              "value2": "HIGH_INTENT_LEAD"
+            }
+          ]
+        }
+      },
+      "id": "CheckHighIntent",
+      "name": "High Intent?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [400, 300]
+    },
+
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"chat_id\": $json.chatId, \"text\": \"🔥 Special Offer! Get started now at just $9. Book demo: https://your-demo-link.com\"}"
+      },
+      "id": "HighIntentMessage",
+      "name": "Send High Intent Offer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [650, 150]
+    },
+
+    {
+      "parameters": {
+        "amount": 10,
+        "unit": "seconds"
+      },
+      "id": "Delay1",
+      "name": "Wait 10s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [650, 450]
+    },
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"chat_id\": $json.chatId, \"text\": \"👋 Welcome! Thanks for joining FlowPilotX.\"}"
+      },
+      "id": "WelcomeMsg",
+      "name": "Send Welcome",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [850, 450]
+    },
+
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "Delay2",
+      "name": "Wait 1 min",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1050, 450]
+    },
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"chat_id\": $json.chatId, \"text\": \"⚡ FlowPilotX helps automate DMs and capture leads effortlessly.\"}"
+      },
+      "id": "ProductMsg",
+      "name": "Send Product Info",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [1250, 450]
+    },
+
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "minutes"
+      },
+      "id": "Delay3",
+      "name": "Wait 5 min",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1450, 450]
+    },
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"chat_id\": $json.chatId, \"text\": \"💰 Limited offer: Get started at just $10/month.\"}"
+      },
+      "id": "OfferMsg",
+      "name": "Send Offer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [1650, 450]
+    }
+  ],
+
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "High Intent?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High Intent?": {
+      "main": [
+        [
+          {
+            "node": "Send High Intent Offer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 10s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 10s": {
+      "main": [
+        [
+          {
+            "node": "Send Welcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Welcome": {
+      "main": [
+        [
+          {
+            "node": "Wait 1 min",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1 min": {
+      "main": [
+        [
+          {
+            "node": "Send Product Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Product Info": {
+      "main": [
+        [
+          {
+            "node": "Wait 5 min",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 5 min": {
+      "main": [
+        [
+          {
+            "node": "Send Offer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+
+  "active": false
+}

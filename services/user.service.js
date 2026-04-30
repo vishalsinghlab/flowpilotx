@@ -14,4 +14,19 @@ const updateUser = async (chatId, data) => {
   return await User.findOneAndUpdate({ chatId }, { $set: data }, { new: true });
 };
 
-module.exports = { getOrCreateUser, updateUser };
+const addMessageToHistory = async (chatId, role, content) => {
+  await User.updateOne(
+    { chatId },
+    {
+      $push: {
+        conversation: {
+          role,
+          content,
+          timestamp: new Date(),
+        },
+      },
+    },
+  );
+};
+
+module.exports = { getOrCreateUser, updateUser, addMessageToHistory };
