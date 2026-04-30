@@ -1,110 +1,181 @@
-# PROJECT STRUCTURE
+# 🚀 FlowPilotX – DM Automation System (Instagram-style)
 
+FlowPilotX is a **DM automation engine** that simulates Instagram Auto-DM workflows using Telegram, Node.js, MongoDB, and n8n.
+
+It enables **trigger-based messaging, automated follow-ups, and lead capture pipelines**, similar to modern marketing automation and CRM systems.
+
+---
+
+## 📌 Features
+
+* 🤖 DM automation via Telegram (Instagram-style simulation)
+* ⚡ Trigger-based messaging (INFO, PRICING, DEMO, etc.)
+* 🔁 Automated follow-up sequences (delay-based workflows via n8n)
+* 🧠 Rule-based conversation engine
+* 🗄️ MongoDB for persistent user state (CRM-like storage)
+* 🔁 Workflow orchestration using n8n
+* 📧 Email notifications and external API integrations
+* 🔌 Decoupled API-driven backend architecture
+
+---
+
+## 🏗️ System Architecture
+
+```
+User
+  ↓
+Telegram Bot Webhook
+  ↓
+Node.js Backend (FlowPilotX)
+  ↓
+Rule Engine + State Manager (MongoDB)
+  ↓
+n8n Workflow Engine
+  ↓
+External Systems (Email / CRM / APIs)
+```
+
+---
+
+## 🚀 Automation Flow Example
+
+### Lead Capture + Follow-up Sequence
+
+1. User sends **"INFO"**
+2. Bot asks for email
+3. User submits email → stored in MongoDB
+4. n8n workflow is triggered:
+
+   * ⏱ After 10 seconds → Welcome message
+   * ⏱ After 60 seconds → Product info / offer
+5. User can trigger flows via keywords:
+
+   * **PRICING** → pricing details
+   * **DEMO** → booking link
+
+---
+
+## ⚙️ Tech Stack
+
+* **Backend:** Node.js, Express
+* **Database:** MongoDB, Mongoose
+* **Automation:** n8n
+* **Messaging:** Telegram Bot API
+* **HTTP Client:** Axios
+
+---
+
+## 📦 Project Structure
+
+```
 flowpilotx/
 │
 ├── backend/
-│ ├── server.js
-│ ├── app.js
-│ ├── config/
-│ ├── models/
-│ ├── services/
-│ ├── engine/
-│ └── routes/
+│   ├── server.js
+│   ├── app.js
+│   ├── config/
+│   ├── models/
+│   ├── services/
+│   ├── engine/
+│   └── routes/
 │
 ├── n8n-workflows/
-│ └── flowpilotx-lead.json
+│   └── flowpilotx-lead.json
 │
 ├── .env.example
 ├── package.json
 └── README.md
+```
 
 ---
 
-# README.md
+## 🧠 Key Capabilities
 
-# 🚀 FlowPilotX – Telegram Lead Automation System
+* Trigger-based DM workflows
+* Automated messaging sequences (multi-step flows)
+* Lead capture and user state management
+* Workflow orchestration using n8n
+* API-based integration with external services
+* Extensible architecture for multi-channel automation
 
-FlowPilotX is a workflow-driven automation backend system that integrates Telegram bots, Node.js backend services, MongoDB, and n8n to build scalable lead capture and automation pipelines.
+---
 
-## 📌 Features
+## 🔗 n8n Workflow
 
-- 🤖 Telegram bot integration (Webhook-based)
-- ⚙️ Node.js backend for orchestration
-- 🧠 Rule-based automation engine
-- 🗄️ MongoDB for persistent user state
-- 🔁 n8n workflow automation integration
-- 📧 Email notification system
-- 🔌 API-driven architecture (decoupled services)
-- 📊 Scalable event-driven design
+Import workflow from:
 
-## 🏗️ System Architecture
+```
+n8n-workflows/flowpilotx-lead.json
+```
 
-Telegram User → Telegram Bot Webhook → Node.js Backend (FlowPilotX) → Rule Engine + State Manager (MongoDB) → n8n Workflow Engine → External Systems (Email / CRM / APIs)
+This workflow handles:
 
-## ⚙️ Tech Stack
+* Lead validation
+* Data formatting
+* Follow-up automation (delayed messages)
+* Email notifications
+* External integrations
 
-- Node.js + Express
-- MongoDB + Mongoose
-- n8n (Workflow automation)
-- Telegram Bot API
-- Axios (API communication)
-
-## 🚀 How It Works
-
-1. User sends message on Telegram
-2. Backend processes webhook
-3. Rule engine determines flow: INFO → ask email → email → store lead
-4. Data stored in MongoDB
-5. n8n workflow triggered
-6. Email + external integrations executed
+---
 
 ## 📦 Installation
 
-### 1. Clone repo
+### 1. Clone repository
 
+```bash
 git clone https://github.com/yourusername/flowpilotx.git
 cd flowpilotx/backend
+```
 
 ### 2. Install dependencies
 
+```bash
 npm install
+```
 
 ### 3. Setup environment variables
 
+Create a `.env` file:
+
+```
 PORT=3000
 MONGO_URI=your_mongodb_url
 BOT_TOKEN=your_telegram_bot_token
 N8N_WEBHOOK_URL=your_n8n_webhook_url
+```
 
 ### 4. Run server
 
+```bash
 node server.js
+```
 
-## 🔗 n8n Workflow
+---
 
-Import workflow from: n8n-workflows/flowpilotx-lead.json
+## 🎯 Use Case
 
-Workflow handles: Lead validation, Data formatting, Email notifications, External integrations
+FlowPilotX replicates how businesses:
 
-## 🧠 Key Concepts Demonstrated
+* automate Instagram/DM conversations
+* capture leads from chat interactions
+* run automated follow-up campaigns
+* integrate chat systems with CRM tools
+* build conversational marketing funnels
 
-- Webhook-based event systems
-- Backend orchestration layer design
-- State management with MongoDB
-- Workflow automation (n8n)
-- API integration patterns
-- Production-style system architecture
+---
 
-## 📈 Future Improvements
+## 🔮 Future Improvements
 
-- AI agent layer (LLM integration)
-- Redis queue system
-- Admin dashboard (React)
-- Multi-channel automation (Instagram / WhatsApp)
-- SaaS multi-tenant architecture
+* 🤖 AI-powered auto replies (LLM integration)
+* 📊 Admin dashboard (React)
+* ⚙️ Redis queue for scalability
+* 📱 Multi-channel support (Instagram / WhatsApp)
+* 🏢 Multi-tenant SaaS architecture
+
+---
 
 ## 👨‍💻 Author
 
-Vishal Singh
+**Vishal Singh**
 Full Stack Developer | Backend & AI Systems
 GitHub: https://github.com/vishalsinghlab
